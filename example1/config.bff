@@ -1,0 +1,59 @@
+; =============================================================================
+; Config
+; =============================================================================
+#once
+
+; =============================================================================
+; Import Environment
+#import VSCMD_ARG_TGT_ARCH
+#import VSCMD_ARG_HOST_ARCH
+#import VCToolsInstallDir
+#import WindowsSdkDir
+#import WindowsSDKVersion
+
+; =============================================================================
+; Setup Environment
+.TgtArch   = .VSCMD_ARG_TGT_ARCH
+.HostArch  = .VSCMD_ARG_HOST_ARCH
+.VSBinPath = '$VCToolsInstallDir$bin\Host$VSCMD_ARG_HOST_ARCH$\$VSCMD_ARG_TGT_ARCH$'
+.VSLibPath = '$VCToolsInstallDir$lib\$VSCMD_ARG_TGT_ARCH$'
+.VSIncPath = '$VCToolsInstallDir$include'
+.WindowsKitIncPath = '$WindowsSdkDir$Include\$WindowsSDKVersion$'
+.WindowsKitLibPath = '$WindowsSdkDir$Lib\$WindowsSDKVersion$'
+
+
+; =============================================================================
+; Compiler Toolchain
+; =============================================================================
+.Compiler           = '$VSBinPath$\cl.exe'
+.CompilerOptions    = '"%1"'                    ; Input
+                    + ' /Fo"%2"'                ; Output
+                    + ' /c'                     ; Compile into object file
+                    + ' /nologo'                ; Remove copyright notice
+                    + ' /Z7'                    ; Generate debug info
+                    + ' /W3'                    ; Enable warnings
+                    + ' /MTd'                   ; Use static debug crt
+
+.Linker             = '$VSBinPath$\link.exe'
+.LinkerOptions      = ' /OUT:"%2"'              ; Output
+                    + ' "%1"'                   ; Input
+                    + ' /NOLOGO'                ; Remove copyright notice
+                    + ' /MACHINE:$TgtArch$'     ; Set target architecture
+
+.Librarian          = '$VSBinPath$\lib.exe'
+.LibrarianOptions   = ' /OUT:"%2" "%1"'
+                    + ' /NOLOGO'                ; Remove copyright notice
+                    + ' /MACHINE:$TgtArch$'     ; Set target architecture
+                    + ' /SUBSYSTEM:CONSOLE'     ; Target console subsystem
+
+
+; =============================================================================
+; Preprocessor
+.CompilerOptions    + ' /D_WINDOWS /DWINDOWS'   ; Always defined
+                    + ' /D_UNICODE /DUNICODE'   ; Enable Unicode
+
+
+; =============================================================================
+; Default Libraries
+.LinkerOptions      + ' kernel32.lib'
+

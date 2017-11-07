@@ -1,0 +1,23 @@
+; =============================================================================
+; Hello World
+; =============================================================================
+#include "config.bff"
+
+
+; Compile all .cpp files in the root directory
+ObjectList('HelloWorld-Cpp')
+{
+    .CompilerInputPath  = '/'
+    .CompilerOutputPath = '_out/'
+}
+
+; Link the executable
+Executable('HelloWorld')
+{
+    .Libraries          = { 'HelloWorld-Cpp' }
+    .LinkerOutput       = '_bin/helloworld.exe'
+}
+
+; Create a default target
+Alias('all') { .Targets = { 'HelloWorld' } }
+

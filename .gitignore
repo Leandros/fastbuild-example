@@ -1,0 +1,11 @@
+# Output
+_bin/
+_out/
+
+# FASTBuild
+*.fdb
+
+# CTags
+tags
+tags.temp
+
